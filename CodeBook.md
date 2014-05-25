@@ -32,15 +32,19 @@ In run_analysis.R four functions are implemented: run_analysis(), getCleanDataSe
 **Important about functions:**
 - Functions should be runned in Working Directory where 'Human Activity Recognition Using 	Smartphones -Data set.rar' is extracted.
 - Clean data set is data set where columns are in order: subject, ... , activityName 
-		- ... = numeric features, numeric variables, etc
-		- "subject" is numeric vector that represents volunteers ID, performer of the experiment
-		- "activityName" is character vector that can take values {"WALKING
+
+... = numeric features, numeric variables, etc
+
+"subject" is numeric vector that represents volunteers ID, performer of the experiment
+
+"activityName" is character vector that can take values {"WALKING
 ", "WALKING_UPSTAIRS",
  "WALKING_DOWNSTAIRS",
  "SITTING
 ", "STANDING",
  "LAYING
 "}
+
 - MSDataSet represents  Mean and Standard deviation Data Set. MSDataSet is also cleanDataSet 	becose its form is: subject, ..., activityName
 - getAverage() returns data set that consist of average for each variable for each activity and 	each subject for input clean data set.
 - run_analysis() will return tidy data set that is reqired for project goal. Tidy data includes 	all features, so `fullFeatures` is TRUE by default, whitch is one and only paramethar of this 	function, if you want to get tidy data set where features are only mean and standard deviation 	(getAverage(SMDataSet)) , change fullFeatures to FALSE.
