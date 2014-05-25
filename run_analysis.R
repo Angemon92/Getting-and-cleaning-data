@@ -1,7 +1,26 @@
-# getDataSet is function that returns tidy data that is decribed in first four instructions
-#(data set that contains only activity name, subject and mean and std columns)
+#run_analysis() function will return tidy data set that is reqired for project
+#Important: Tidy data includes all features, so fullFeatures are TRUE by default, if you want to get tidy data
+# where features are only mean and standard deviation features, the change fullFeatures to FALSE
+run_analysis <- function(fullFeatures=T){
+        
+# get data set with full features
+        dataSet = getCleanDataSet()
+        
+# if you want to extracts only mean and standard deviation features (fullFeatures=FALSE)
+        if(!fullFeatures)   dataSet = getMSDataSet(dataSet)
 
-getDataSet <- function(){
+# calculate tidy data set
+        tidyDataSet = getAverage(dataSet)
+
+        tidyDataSet        
+}
+
+
+# getCleanDataSet is function that returns clean (tidy) data set
+# Clean data set is data set where columns are in order: subject, ... , activityName (... = numeric features, variables, etc)
+# Important: function should be runned in Working Directory where 
+# 'Human Activity Recognition Using Smartphones - Data set.rar' is extracted.
+getCleanDataSet <- function(){
         
 # MyRead for faster loading data set
         myRead<-function(path,...){
@@ -30,11 +49,11 @@ getDataSet <- function(){
         
         features = as.character(features[,2])        
         
-# - 1) Merges the training and the test sets to create one data set. -
+# 1) Merges the training and the test sets to create one data set. 
 # join test and train X       
         X = rbind(X_test, X_train)
         
-# - 4) Appropriately labels the data set with descriptive activity names. -
+# 4) Appropriately labels the data set with descriptive activity names.
 # add primary key for X named "rowNumber" ( for later merging with y)
 # name features ( columns )
         X = cbind(X, 1:10299)
@@ -48,7 +67,7 @@ getDataSet <- function(){
         
 # add primary key for y named "rowNumber" ( for later merging with X)
         y = cbind(1:10299, y)
-# - 3) Uses descriptive activity names to name the activities in the data set. -
+# 3) Uses descriptive activity names to name the activities in the data set. -
 # get y that contains: subject who is performing activity column, activity name column and primary key column 
         y = cbind(y, subject)
         colnames(y) = c("rowNumber","activityNumber","subject")
@@ -65,37 +84,59 @@ getDataSet <- function(){
         dataSet = dataSet[,2:564]
         
 # reorder columns to: subject, ...features..., activityName
-        dataSet = subset(dataSet, select=c("subject", features, "activityName")) 
+        cleanDataSet = subset(dataSet, select=c("subject", features, "activityName")) 
+
+        cleanDataSet
+}
+
+# 2) Extracts only the measurements on the mean and standard deviation for each measurement.
+# function returns data.frame with
+# MS Data Set =  Mean and Standard deviation Data Set
+# MSDataSet is also cleanDataSet (subject, ..., activityName)
+getMSDataSet <-function(cleanDataSet){
         
-# - 2) Extracts only the measurements on the mean and standard deviation for each measurement. -
-# get only mean and std columns
+        dataSet = cleanDataSet
         
+# get only mean and std columns       
         colNames = names(dataSet)
         logicalMean = colNames %in% grep("mean", colNames, value = TRUE)
         logicalStd = colNames %in% grep("std", colNames, value = TRUE)
         logicalSubject = colNames %in% grep("subject", colNames, value = TRUE) 
         logicalActivityName = colNames %in% grep("activityName", colNames, value = TRUE)
         logicalRemoveFreq = !( colNames %in% grep("Freq", colNames, value = TRUE) )
-        
+
         logicalNeededColumns = (logicalMean | logicalStd | logicalSubject | logicalActivityName) & logicalRemoveFreq
-#logicalNeededColumns = logical & logicalRemoveFreq
-        
+
         dataSet = dataSet[,logicalNeededColumns]
+
+        dataSet 
         
-        dataSet
 }
+
 
 
 # - 5) Creates a second, independent tidy data set with the average of each variable for each activity and each subject. -
 #getAverage function returns data set that contains
 #average for each variable for each activity and each subject for input data set.
+getAverage <- function(cleanDataSet){
+    
 
-getAverage <- function(data.frame){
+        dataSet = cleanDataSet
+        names = names(dataSet)
         
-        dataSet = data.frame
-        groupedData = split(dataSet, dataSet$subject)
-        # didnt had time to finish ...
-        
+# get all features from dataSet (skip "subject" and "activityName" columns, whitch are first and last column)
+        features = names[2: (length(names)-1)]
+
+# calculate mean of all features, grouped by subject and activityName
+        dataSet = aggregate( dataSet[,features], dataSet[,c( 1, ncol(dataSet))], FUN = mean )
+
+# order dataSet by subject  
+        dataSet = dataSet[order(dataSet$subject),]
+
+# reorder columns to: subject, ...features..., activityName (transform dataSet to cleanDataSet)
+        cleanDataSet = subset(dataSet, select=c("subject", features, "activityName"))
+
+        cleanDataSet
 }
 
 
