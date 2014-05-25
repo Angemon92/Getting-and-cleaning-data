@@ -22,9 +22,9 @@ run_analysis.R is script (also function) that i had to code for passing the cour
     4.Appropriately labels the data set with descriptive activity names. 
     5.Creates a second, independent tidy data set with the average of each variable for each activity and 	each subject. 
 
-1,2,3 instructions are implemented in getCleanDataSet() function.
-4th instruction is implemented in getMSDataSet() function.
-5th instruction is implemented in getAverage() function.
+-1,2,3 instructions are implemented in getCleanDataSet() function.
+-4th instruction is implemented in getMSDataSet() function.
+-5th instruction is implemented in getAverage() function.
 
 **Important about functions:**
 1. Functions should be runned in Working Directory where 'Human Activity Recognition Using Smartphones - Data set.rar' is extracted.
