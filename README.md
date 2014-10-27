@@ -1,5 +1,10 @@
-Human-activity-recognition-using-sartphones
-============================================
+Data Science Specialisation 
+===================
+### John Hopking University
+####Course 3: Getting and Cleaning data
+### Project:
+###Human-activity-recognition-using-sartphones
+
 `Author: Stefan Jovanovic`
 
  **This project is based on course "Getting and cleaning data" final project, from Coursera.**
